@@ -17,7 +17,7 @@ import javax.swing.SwingConstants;
  * 
  * @author Luis
  * @version Version 1, 2019
- * 
+ *  Documentación ExamenEDE 2ev
  */
 @SuppressWarnings("serial")
 public class Principal extends JFrame {
