@@ -20,7 +20,11 @@ import org.neodatis.odb.ODBFactory;
 import org.neodatis.odb.core.query.IQuery;
 import org.neodatis.odb.core.query.criteria.Where;
 import org.neodatis.odb.impl.core.query.criteria.CriteriaQuery;
-
+/**
+ * 
+ * esta clase se encarga del mantenimiento de los datos de empleados, se realizan altas, bajas, modificaciones y consultas.
+ *
+ */
 @SuppressWarnings("serial")
 public class OperacionesEmple extends JDialog {
 	private static final String BBDD="Empleados.dat";
