@@ -126,9 +126,8 @@ public class OperacionesDepart extends JDialog {
 					comprobarNumDepart(odb, num);
 					if(!txNombre.getText().equals("")){
 						if(!txPoblacion.getText().equals("")){
-							nom=txNombre.getText();
-							pob=txPoblacion.getText();
-							odb.store(new Departamento(num,nom,pob));
+							
+							insertarDep(num, odb);
 							
 							lblRespuesta.setText("Departamento insertado correctamente");
 						}
@@ -148,6 +147,14 @@ public class OperacionesDepart extends JDialog {
 					odb.close();
 				}
 			}
+
+			private void insertarDep(int num, ODB odb) {
+				String nom;
+				String pob;
+				nom=txNombre.getText();
+				pob=txPoblacion.getText();
+				odb.store(new Departamento(num,nom,pob));
+			}
 		});
 		
 		//Accion boton borrar departamento
@@ -164,11 +171,7 @@ public class OperacionesDepart extends JDialog {
 						IQuery query2=new CriteriaQuery(Empleado.class, 
 								Where.equal("dept.dept_no", dep.getFirst().getDept_no()));
 						Objects<Empleado> emp=odb.getObjects(query2);
-						for(Empleado e:emp){
-							e.setDept(null);
-							odb.store(e);
-						}
-						odb.delete(dep.getFirst());
+						borrarDep(odb, dep, emp);
 						lblRespuesta.setText("Departamento borrado correctamente");
 					}
 					else
@@ -180,6 +183,14 @@ public class OperacionesDepart extends JDialog {
 				finally{
 					odb.close();
 				}
+			}
+
+			private void borrarDep(ODB odb, Objects<Departamento> dep, Objects<Empleado> emp) {
+				for(Empleado e:emp){
+					e.setDept(null);
+					odb.store(e);
+				}
+				odb.delete(dep.getFirst());
 			}
 		});
 		
@@ -194,8 +205,7 @@ public class OperacionesDepart extends JDialog {
 					IQuery query=new CriteriaQuery(Departamento.class, Where.equal("dept_no", num));
 					Objects<Departamento> dep=odb.getObjects(query);
 					if(!dep.isEmpty()){
-						txNombre.setText(dep.getFirst().getDnombre());
-						txPoblacion.setText(dep.getFirst().getLoc());
+						consultarDep(dep);
 						lblRespuesta.setText("Consulta satisfactoria");
 					}
 					else
@@ -207,6 +217,11 @@ public class OperacionesDepart extends JDialog {
 				finally{
 					odb.close();
 				}
+			}
+
+			private void consultarDep(Objects<Departamento> dep) {
+				txNombre.setText(dep.getFirst().getDnombre());
+				txPoblacion.setText(dep.getFirst().getLoc());
 			}
 		});
 		
@@ -223,11 +238,7 @@ public class OperacionesDepart extends JDialog {
 					if(!dep.isEmpty()){
 						if(!txNombre.getText().equals("")){
 							if(!txPoblacion.getText().equals("")){
-								Departamento depar;
-								depar=dep.getFirst();
-								depar.setDnombre(txNombre.getText());
-								depar.setLoc(txPoblacion.getText());
-								odb.store(depar);
+								modificarDep(odb, dep);
 								lblRespuesta.setText("Modifcacion satisfactoria");
 							}
 							else
@@ -245,6 +256,14 @@ public class OperacionesDepart extends JDialog {
 				finally{
 					odb.close();
 				}
+			}
+
+			private void modificarDep(ODB odb, Objects<Departamento> dep) {
+				Departamento depar;
+				depar=dep.getFirst();
+				depar.setDnombre(txNombre.getText());
+				depar.setLoc(txPoblacion.getText());
+				odb.store(depar);
 			}
 		});
 	}
