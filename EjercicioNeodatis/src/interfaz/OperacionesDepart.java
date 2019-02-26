@@ -26,7 +26,7 @@ import org.neodatis.odb.impl.core.query.criteria.CriteriaQuery;
 import javax.swing.SwingConstants;
 
 @SuppressWarnings("serial")
-public class OperacionesDepart extends JDialog {
+public class OperacionesDepart extends JDialog implements InterfazDepart {
 	private static final String BBDD="Empleados.dat";
 	private JPanel contentPane;
 	private JTextField txNumDepart;
@@ -248,6 +248,10 @@ public class OperacionesDepart extends JDialog {
 			throw new NumDepartDuplicado("numero de departamento duplicado");
 	}
 
+	/* (non-Javadoc)
+	 * @see interfaz.InterfazDepart#insertarDep(int, org.neodatis.odb.ODB)
+	 */
+	@Override
 	public void insertarDep(int num, ODB odb) {
 		String nom;
 		String pob;
@@ -256,6 +260,10 @@ public class OperacionesDepart extends JDialog {
 		odb.store(new Departamento(num,nom,pob));
 	}
 
+	/* (non-Javadoc)
+	 * @see interfaz.InterfazDepart#borrarDep(org.neodatis.odb.ODB, org.neodatis.odb.Objects, org.neodatis.odb.Objects)
+	 */
+	@Override
 	public void borrarDep(ODB odb, Objects<Departamento> dep, Objects<Empleado> emp) {
 		for(Empleado e:emp){
 			e.setDept(null);
@@ -264,11 +272,19 @@ public class OperacionesDepart extends JDialog {
 		odb.delete(dep.getFirst());
 	}
 
+	/* (non-Javadoc)
+	 * @see interfaz.InterfazDepart#consultarDep(org.neodatis.odb.Objects)
+	 */
+	@Override
 	public void consultarDep(Objects<Departamento> dep) {
 		txNombre.setText(dep.getFirst().getDnombre());
 		txPoblacion.setText(dep.getFirst().getLoc());
 	}
 
+	/* (non-Javadoc)
+	 * @see interfaz.InterfazDepart#modificarDep(org.neodatis.odb.ODB, org.neodatis.odb.Objects)
+	 */
+	@Override
 	public void modificarDep(ODB odb, Objects<Departamento> dep) {
 		Departamento depar;
 		depar=dep.getFirst();
