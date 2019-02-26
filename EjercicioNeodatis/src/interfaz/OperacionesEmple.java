@@ -23,71 +23,6 @@ import org.neodatis.odb.impl.core.query.criteria.CriteriaQuery;
 
 @SuppressWarnings("serial")
 public class OperacionesEmple extends JDialog {
-	private final class Modificar implements ActionListener {
-		// Modificar registro de la BD.
-		public void actionPerformed(ActionEvent arg0) {
-			int numEmple, numDepar;
-			double salario;
-			ODB odb=ODBFactory.open(BBDD);
-			
-			try{
-				numEmple=Integer.parseInt(txNumEmple.getText());
-				IQuery query=new CriteriaQuery(Empleado.class, Where.equal("emp_no", numEmple));
-				if(!odb.getObjects(query).isEmpty()){
-					Empleado emple=(Empleado)odb.getObjects(query).getFirst();
-					if(!txNombre.getText().isEmpty()){
-						if(!txPoblacion.getText().isEmpty()){
-							if(!txOficio.getText().isEmpty()){
-								try{
-									salario=Double.parseDouble(txSalario.getText());
-									if(salario>0){
-										try{
-											numDepar=Integer.parseInt(txNumDepart.getText());
-											query=new CriteriaQuery(Departamento.class, Where.equal("dept_no", numDepar));
-											if(!odb.getObjects(query).isEmpty()){
-												Departamento dep=(Departamento)odb.getObjects(query).getFirst();
-												emple.setNombre(txNombre.getText());
-												emple.setPobla(txPoblacion.getText());
-												emple.setOficio(txOficio.getText());
-												emple.setSalario(salario);
-												emple.setDept(dep);
-												odb.store(emple);
-												lblResultado.setText("Empleado modificado correctamente");
-											}
-											else
-												lblResultado.setText("Error, el departamento no existe");
-										}
-										catch(NumberFormatException e){
-											lblResultado.setText("Error, numero de departamento erroneo");
-										}
-									}
-									else
-										lblResultado.setText("Error, el salario debe ser positivo");
-								}
-								catch(NumberFormatException e){
-									lblResultado.setText("Error, salario erroneo");
-								}
-							}
-							else
-								lblResultado.setText("Error, oficio vacio");
-						}
-						else
-							lblResultado.setText("Error, poblacion vacia");
-					}
-					else
-						lblResultado.setText("Error, nombre vacio");
-				}
-				else
-					lblResultado.setText("Error, el empleado no existe");
-			}catch(NumberFormatException e){
-			lblResultado.setText("Error, numero de empleado incorrecto");
-			}
-			finally{
-				odb.close();
-			}
-		}
-	}
-
 	private final class Borrar implements ActionListener {
 		// Borrar registro de la BD
 		public void actionPerformed(ActionEvent arg0) {
@@ -333,6 +268,69 @@ public class OperacionesEmple extends JDialog {
 		btnBorrar.addActionListener(new Borrar());
 		
 		//Accion boton modificar
-		btnModificar.addActionListener(new Modificar());
+		btnModificar.addActionListener(new ActionListener() {
+			// Modificar registro de la BD.
+			public void actionPerformed(ActionEvent arg0) {
+				int numEmple, numDepar;
+				double salario;
+				ODB odb=ODBFactory.open(BBDD);
+				
+				try{
+					numEmple=Integer.parseInt(txNumEmple.getText());
+					IQuery query=new CriteriaQuery(Empleado.class, Where.equal("emp_no", numEmple));
+					if(!odb.getObjects(query).isEmpty()){
+						Empleado emple=(Empleado)odb.getObjects(query).getFirst();
+						if(!txNombre.getText().isEmpty()){
+							if(!txPoblacion.getText().isEmpty()){
+								if(!txOficio.getText().isEmpty()){
+									try{
+										salario=Double.parseDouble(txSalario.getText());
+										if(salario>0){
+											try{
+												numDepar=Integer.parseInt(txNumDepart.getText());
+												query=new CriteriaQuery(Departamento.class, Where.equal("dept_no", numDepar));
+												if(!odb.getObjects(query).isEmpty()){
+													Departamento dep=(Departamento)odb.getObjects(query).getFirst();
+													emple.setNombre(txNombre.getText());
+													emple.setPobla(txPoblacion.getText());
+													emple.setOficio(txOficio.getText());
+													emple.setSalario(salario);
+													emple.setDept(dep);
+													odb.store(emple);
+													lblResultado.setText("Empleado modificado correctamente");
+												}
+												else
+													lblResultado.setText("Error, el departamento no existe");
+											}
+											catch(NumberFormatException e){
+												lblResultado.setText("Error, numero de departamento erroneo");
+											}
+										}
+										else
+											lblResultado.setText("Error, el salario debe ser positivo");
+									}
+									catch(NumberFormatException e){
+										lblResultado.setText("Error, salario erroneo");
+									}
+								}
+								else
+									lblResultado.setText("Error, oficio vacio");
+							}
+							else
+								lblResultado.setText("Error, poblacion vacia");
+						}
+						else
+							lblResultado.setText("Error, nombre vacio");
+					}
+					else
+						lblResultado.setText("Error, el empleado no existe");
+				}catch(NumberFormatException e){
+				lblResultado.setText("Error, numero de empleado incorrecto");
+				}
+				finally{
+					odb.close();
+				}
+			}
+		});
 	}
 }
