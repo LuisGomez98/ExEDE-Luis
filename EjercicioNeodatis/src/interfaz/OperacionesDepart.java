@@ -188,7 +188,7 @@ public class OperacionesDepart extends JDialog implements InterfazDepart {
 					IQuery query=new CriteriaQuery(Departamento.class, Where.equal("dept_no", num));
 					Objects<Departamento> dep=odb.getObjects(query);
 					if(!dep.isEmpty()){
-						consultarDep(dep);
+						consultarDep(dep,0,0);
 						lblRespuesta.setText("Consulta satisfactoria");
 					}
 					else
@@ -275,10 +275,10 @@ public class OperacionesDepart extends JDialog implements InterfazDepart {
 	/* (non-Javadoc)
 	 * @see interfaz.InterfazDepart#consultarDep(org.neodatis.odb.Objects)
 	 */
-	@Override
-	public void consultarDep(Objects<Departamento> dep) {
+	public String consultarDep(Objects<Departamento> dep, int num1, int num2) {
 		txNombre.setText(dep.getFirst().getDnombre());
 		txPoblacion.setText(dep.getFirst().getLoc());
+		return "a";
 	}
 
 	/* (non-Javadoc)

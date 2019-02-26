@@ -12,7 +12,7 @@ public interface InterfazDepart {
 
 	void borrarDep(ODB odb, Objects<Departamento> dep, Objects<Empleado> emp);
 
-	void consultarDep(Objects<Departamento> dep);
+	String consultarDep(Objects<Departamento> dep, int num1, int num2);
 
 	void modificarDep(ODB odb, Objects<Departamento> dep);
 
